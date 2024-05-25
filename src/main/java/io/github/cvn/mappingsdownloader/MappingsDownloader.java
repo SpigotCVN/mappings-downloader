@@ -4,7 +4,9 @@ import io.github.cvn.mappingsdownloader.libs.MappingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -22,32 +24,38 @@ public class MappingsDownloader {
         this.config = config;
 
         minecraftVersion = getMinecraftVersion();
-
-        tryDownload();
     }
 
-    private void tryDownload() {
+    /**
+     * Try to download the mappings for the current server version.
+     * @return The downloaded file
+     */
+    public @Nullable File tryDownload() {
         MappingsManager mappingsManager = new MappingsManager(plugin, config, minecraftVersion);
 
         try {
-            mappingsManager.downloadCorrectMapping();
+            return mappingsManager.downloadCorrectMapping();
         } catch (IOException e) {
             plugin.getLogger().severe("Failed to download mappings for minecraft " + minecraftVersion + " !");
 
-            if(tried) return;
+            if(tried) return null;
 
             minecraftVersion = getServerMinecraftVersion();
             plugin.getLogger().info("Trying with automatic for " + minecraftVersion + "...");
 
-            tryDownload();
-
             tried = true;
 
             config.set("minecraft-version", "");
+
+            return tryDownload();
         }
     }
 
-    private String getMinecraftVersion() {
+    /**
+     * Returns the cached version, the config version, or the version from {@link #getServerMinecraftVersion()}
+     * @return Minecraft version
+     */
+    public String getMinecraftVersion() {
         if (minecraftVersion != null) {
             return minecraftVersion;
         }
@@ -64,7 +72,7 @@ public class MappingsDownloader {
      *
      * @return Minecraft version
      */
-    private String getServerMinecraftVersion() {
+    public String getServerMinecraftVersion() {
         String bukkitGetVersionOutput = Bukkit.getVersion();
         Matcher matcher = Pattern.compile("\\(MC: (?<version>\\d+\\.\\d+(\\.\\d+)?)\\)").matcher(bukkitGetVersionOutput);
         if (matcher.find()) {
