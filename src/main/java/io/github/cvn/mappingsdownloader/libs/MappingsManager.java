@@ -1,7 +1,7 @@
 package io.github.cvn.mappingsdownloader.libs;
 
-import io.github.cvn.mappingsdownloader.MappingsDownloader;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.net.URL;
@@ -9,11 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class MappingsManager {
-    public MappingsDownloader plugin;
+    public JavaPlugin plugin;
     private final String minecraftVersion;
     public FileConfiguration config;
 
-    public MappingsManager(MappingsDownloader plugin, FileConfiguration config, String minecraftVersion) {
+    public MappingsManager(JavaPlugin plugin, FileConfiguration config, String minecraftVersion) {
         this.plugin = plugin;
         this.config = config;
         this.minecraftVersion = minecraftVersion;

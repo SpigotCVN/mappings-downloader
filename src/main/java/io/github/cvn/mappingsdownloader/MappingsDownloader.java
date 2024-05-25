@@ -10,36 +10,34 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class MappingsDownloader extends JavaPlugin {
-    private String minecraftVersion;
+public class MappingsDownloader {
+    public JavaPlugin plugin;
     public FileConfiguration config;
 
+    private String minecraftVersion;
     private boolean tried = false;
 
-    @Override
-    public void onEnable() {
-        getLogger().info("Enabled!");
+    public MappingsDownloader(FileConfiguration config, JavaPlugin plugin) {
+        this.plugin = plugin;
+        this.config = config;
 
-        saveDefaultConfig();
-
-        config = getConfig();
         minecraftVersion = getMinecraftVersion();
 
         tryDownload();
     }
 
     private void tryDownload() {
-        MappingsManager mappingsManager = new MappingsManager(this, config, minecraftVersion);
+        MappingsManager mappingsManager = new MappingsManager(plugin, config, minecraftVersion);
 
         try {
             mappingsManager.downloadCorrectMapping();
         } catch (IOException e) {
-            getLogger().severe("Failed to download mappings for minecraft " + minecraftVersion + " !");
+            plugin.getLogger().severe("Failed to download mappings for minecraft " + minecraftVersion + " !");
 
             if(tried) return;
 
             minecraftVersion = getServerMinecraftVersion();
-            getLogger().info("Trying with automatic for " + minecraftVersion + "...");
+            plugin.getLogger().info("Trying with automatic for " + minecraftVersion + "...");
 
             tryDownload();
 
