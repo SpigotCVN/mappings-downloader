@@ -19,11 +19,11 @@ public class MappingsDownloader {
     private String minecraftVersion;
     private boolean tried = false;
 
-    public MappingsDownloader(FileConfiguration config, JavaPlugin plugin) {
+    public MappingsDownloader(JavaPlugin plugin, FileConfiguration config, String minecraftVersion) {
         this.plugin = plugin;
         this.config = config;
 
-        minecraftVersion = getMinecraftVersion();
+        this.minecraftVersion = minecraftVersion;
     }
 
     /**
