@@ -14,6 +14,8 @@ public final class MappingsDownloader extends JavaPlugin {
     private String minecraftVersion;
     public FileConfiguration config;
 
+    private boolean tried = false;
+
     @Override
     public void onEnable() {
         getLogger().info("Enabled!");
@@ -23,12 +25,27 @@ public final class MappingsDownloader extends JavaPlugin {
         config = getConfig();
         minecraftVersion = getMinecraftVersion();
 
+        tryDownload();
+    }
+
+    private void tryDownload() {
         MappingsManager mappingsManager = new MappingsManager(this, config, minecraftVersion);
 
         try {
             mappingsManager.downloadCorrectMapping();
         } catch (IOException e) {
             getLogger().severe("Failed to download mappings for minecraft " + minecraftVersion + " !");
+
+            if(tried) return;
+
+            minecraftVersion = getServerMinecraftVersion();
+            getLogger().info("Trying with automatic for " + minecraftVersion + "...");
+
+            tryDownload();
+
+            tried = true;
+
+            config.set("minecraft-version", "");
         }
     }
 
