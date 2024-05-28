@@ -1,4 +1,4 @@
-package io.github.cvn.mappingsdownloader.libs;
+package io.github.spigotcvn.mappingsdownloader.libs;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,11 +14,9 @@ import java.nio.file.Paths;
 public class MappingsManager {
     public JavaPlugin plugin;
     private final String minecraftVersion;
-    public FileConfiguration config;
 
-    public MappingsManager(JavaPlugin plugin, FileConfiguration config, String minecraftVersion) {
+    public MappingsManager(JavaPlugin plugin, String minecraftVersion) {
         this.plugin = plugin;
-        this.config = config;
         this.minecraftVersion = minecraftVersion;
     }
 

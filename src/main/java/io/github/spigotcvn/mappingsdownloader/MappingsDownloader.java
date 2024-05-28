@@ -1,6 +1,6 @@
-package io.github.cvn.mappingsdownloader;
+package io.github.spigotcvn.mappingsdownloader;
 
-import io.github.cvn.mappingsdownloader.libs.MappingsManager;
+import io.github.spigotcvn.mappingsdownloader.libs.MappingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +31,7 @@ public class MappingsDownloader {
      * @return The downloaded file
      */
     public @Nullable File tryDownload() {
-        MappingsManager mappingsManager = new MappingsManager(plugin, config, minecraftVersion);
+        MappingsManager mappingsManager = new MappingsManager(plugin, minecraftVersion);
 
         try {
             return mappingsManager.downloadCorrectMapping();
