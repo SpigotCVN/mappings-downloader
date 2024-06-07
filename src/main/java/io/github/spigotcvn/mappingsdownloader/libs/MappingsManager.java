@@ -1,6 +1,5 @@
 package io.github.spigotcvn.mappingsdownloader.libs;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -12,12 +11,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class MappingsManager {
-    public JavaPlugin plugin;
+    private final JavaPlugin plugin;
     private final String minecraftVersion;
+    private final String mappingsFolder;
 
-    public MappingsManager(JavaPlugin plugin, String minecraftVersion) {
+    public MappingsManager(JavaPlugin plugin, String minecraftVersion, String mappingsFolder) {
         this.plugin = plugin;
         this.minecraftVersion = minecraftVersion;
+        this.mappingsFolder = mappingsFolder;
     }
 
     public File downloadCorrectMapping() throws IOException {
@@ -26,11 +27,9 @@ public class MappingsManager {
         String fileName = minecraftVersion + ".tiny";
         URL downloadUrl = new URL("https://raw.githubusercontent.com/Cross-Version-NMS/CVN-mappings/main/mappings/" + fileName);
 
-        String folderPath = plugin.getDataFolder().getAbsolutePath() + "/mappings";
+        Files.createDirectories(Paths.get(mappingsFolder));
 
-        Files.createDirectories(Paths.get(folderPath));
-
-        return download(downloadUrl, folderPath + "/" + fileName);
+        return download(downloadUrl, mappingsFolder + "/" + fileName);
     }
 
     public File download(URL downloadUrl, String path) throws IOException {
